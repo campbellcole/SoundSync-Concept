@@ -5,3 +5,6 @@
 *.ear
 hs_err_pid*
 .metadata/
+Sound Sync/.project
+*.classpath
+Sound Sync/.settings/org.eclipse.jdt.core.prefs
