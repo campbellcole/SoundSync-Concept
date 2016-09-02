@@ -1,5 +1,6 @@
 package com.tachestudios.soundsync.soundcloud;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -36,7 +37,11 @@ public class SoundCloudHandler {
 		}
 		Thread pThread = new Thread() {
 			public void run() {
-				testPlay(toPlay.getStreamUrl());
+				try {
+					testPlay(toPlay.getStreamUrl());
+				} catch (NullPointerException e) {
+					// ignore. the track will not be played.
+				}
 			}
 		};
 		pThread.start();
@@ -53,9 +58,12 @@ public class SoundCloudHandler {
 			getUrl += URLEncoder.encode(url, "UTF-8");
 			getUrl += "&client_id=" + publicKey;
 			String s = getHTML(getUrl);
+			if (s.equals("BADSONG")) {
+				return null;
+			}
 			JSONObject obj = new JSONObject(s);
 			int id = obj.getInt("id");
-			System.out.println(id);
+			System.out.println("Song ID: " + id);
 			Track t = soundcloud.get("tracks/"+id);
 			return t;
 		} catch (Exception e) {
@@ -69,8 +77,14 @@ public class SoundCloudHandler {
 		URL url = new URL(urlToRead);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
-		BufferedReader rd = new BufferedReader(new InputStreamReader(
+		BufferedReader rd;
+		try {
+		rd = new BufferedReader(new InputStreamReader(
 				conn.getInputStream()));
+		} catch (FileNotFoundException e) {
+			System.out.println("Invalid song. Will not try to play.");
+			return "BADSONG"; // just generate a nullpointerexception
+		}
 		String line;
 		while ((line = rd.readLine()) != null) {
 			result.append(line);

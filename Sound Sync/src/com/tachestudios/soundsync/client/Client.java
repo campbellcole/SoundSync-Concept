@@ -23,20 +23,17 @@ public class Client {
 				while (true) {
 					try {
 						Object message = messages.take();
-						String command = (String) message; // should only
-															// receive strings
+						String command = (String) message;
+						System.out.println("Message Received: " + message);
 						switch (command.split(" ")[0]) {
 						case "PLAY":
-							// use soundcloud API to play the song in a
-							// different, controllable thread
-							System.out.println("playing song with ID " + command.split(" ")[1]);
+							System.out.println("Playing song from URL " + command.split(" ")[1]);
 							SoundCloudHandler.playSong(SoundCloudHandler.getTrackFromUrl(command.split(" ")[1]));
 							break;
 						case "PAUSE":
 							System.out.println("received pause message. not implemented yet.");
 							break;
 						}
-						System.out.println("Message Received: " + message);
 					} catch (InterruptedException e) {
 					}
 				}

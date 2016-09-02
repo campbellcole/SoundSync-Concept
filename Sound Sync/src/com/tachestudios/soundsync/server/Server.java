@@ -3,6 +3,7 @@ package com.tachestudios.soundsync.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -69,8 +70,10 @@ public class Server {
 				public void run() {
 					try {
 						in = new ObjectInputStream(socket.getInputStream());
-					} catch (IOException e1) {
-						e1.printStackTrace();
+					} catch (StreamCorruptedException e) {
+						// safely ignore this. it means a crawler tried to connect the wrong way.
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 					while (true) {
 						try {

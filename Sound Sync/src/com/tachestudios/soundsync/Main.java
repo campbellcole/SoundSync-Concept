@@ -23,7 +23,6 @@ public class Main {
 			if (args.length == 2) {
 				port = Integer.parseInt(args[1]);
 			}
-			System.out.println(port);
 			Main.port = port;
 			try {
 				runServer();
@@ -41,7 +40,6 @@ public class Main {
 				}
 				Main.host = host;
 				Main.port = port;
-				System.out.println("starting client");
 				try {
 					runClient();
 				} catch (IOException e) {
@@ -57,6 +55,7 @@ public class Main {
 	}
 
 	public static void runServer() throws IOException {
+		System.out.println("Starting server on port " + port);
 		Server server = new Server(port);
 		Thread scanner = new Thread() {
 			public void run() {
@@ -77,6 +76,7 @@ public class Main {
 
 	@SuppressWarnings("unused")
 	public static void runClient() throws IOException {
+		System.out.println("Starting client with host " + host + " and port " + port);
 		Client client = new Client(host, port);
 	}
 
