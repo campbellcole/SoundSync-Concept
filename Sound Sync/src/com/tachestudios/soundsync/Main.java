@@ -68,7 +68,7 @@ public class Main {
 						System.exit(0);
 						break; // unreachable
 					}
-					server.sendToAll("PLAY " + entered); // send in URLs from soundcloud
+					server.sendToAll(entered); // send in URLs from soundcloud
 				}
 			}
 		};

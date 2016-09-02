@@ -23,13 +23,24 @@ public class SoundCloudHandler {
 	private static SoundCloud soundcloud;
 	private static String publicKey = "1a36ef537213ab9167a3a563954423bf";
 	private static String privateKey = "dcc3970b63f1637ae1c2d990db269718";
+	private static Thread playThread;
 
 	public static void init() {
 		soundcloud = new SoundCloud(publicKey, privateKey);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void playSong(Track toPlay) {
-		testPlay(toPlay.getStreamUrl());
+		if (playThread != null) {
+			playThread.stop();
+		}
+		Thread pThread = new Thread() {
+			public void run() {
+				testPlay(toPlay.getStreamUrl());
+			}
+		};
+		pThread.start();
+		playThread = pThread;
 	}
 	
 	public static void playSong(String url) {
