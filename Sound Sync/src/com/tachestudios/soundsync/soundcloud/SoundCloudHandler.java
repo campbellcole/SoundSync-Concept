@@ -25,6 +25,8 @@ public class SoundCloudHandler {
 	private static String publicKey = "1a36ef537213ab9167a3a563954423bf";
 	private static String privateKey = "dcc3970b63f1637ae1c2d990db269718";
 	private static Thread playThread;
+	private static String next;
+	private static boolean playNext;
 
 	public static void init() {
 		soundcloud = new SoundCloud(publicKey, privateKey);
@@ -39,6 +41,7 @@ public class SoundCloudHandler {
 			public void run() {
 				try {
 					testPlay(toPlay.getStreamUrl());
+					threadFinished();
 				} catch (NullPointerException e) {
 					// ignore. the track will not be played.
 				}
@@ -46,6 +49,23 @@ public class SoundCloudHandler {
 		};
 		pThread.start();
 		playThread = pThread;
+	}
+	
+	private static void threadFinished() {
+		try {
+			playThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (playNext) {
+			playNext = false;
+			playSong(next);
+		}
+	}
+	
+	public static void playSongNext(String url) {
+		playNext = true;
+		next = url;
 	}
 	
 	public static void playSong(String url) {

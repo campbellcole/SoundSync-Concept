@@ -30,8 +30,9 @@ public class Client {
 							System.out.println("Playing song from URL " + command.split(" ")[1]);
 							SoundCloudHandler.playSong(SoundCloudHandler.getTrackFromUrl(command.split(" ")[1]));
 							break;
-						case "PAUSE":
-							System.out.println("received pause message. not implemented yet.");
+						case "PLAYNEXT":
+							System.out.println("Playing song next from URL " + command.split(" ")[1]);
+							SoundCloudHandler.playSongNext(command.split(" ")[1]);
 							break;
 						}
 					} catch (InterruptedException e) {
